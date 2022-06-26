@@ -26,9 +26,9 @@ byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 // char server[] = "www.google.com";    // name address for Google (using DNS)
 
 // Set the static IP address to use if the DHCP fails to assign
-IPAddress ip(169, 254, 183, 186);
+IPAddress ip(169, 254, 115, 182);
 IPAddress myDns(192, 168, 0, 1);
-
+char server;
 // Initialize the Ethernet client library
 // with the IP address and port of the server
 // that you want to connect to (port 80 is default for HTTP):
