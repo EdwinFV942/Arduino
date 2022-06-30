@@ -19,8 +19,10 @@
 
 #include <SPI.h>
 #include <Ethernet.h>
-int Fotocelda;
-int led = 7;
+int FotoceldaSalon1;
+int FotoceldaSalon2;
+int ledSalon1 = 7;
+int ledSalon2 = 6;
 
 // Enter a MAC address and IP address for your controller below.
 // The IP address will be dependent on your local network:
@@ -45,7 +47,8 @@ void setup() {
 
   // Open serial communications and wait for port to open:
   Serial.begin(9600);
-  pinMode(led, OUTPUT);
+  pinMode(ledSalon1, OUTPUT);
+  pinMode(ledSalon2, OUTPUT);
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
   }
@@ -74,7 +77,8 @@ void setup() {
 
 void loop() {
   // listen for incoming clients
-  Fotocelda = analogRead(A0);
+  FotoceldaSalon1 = analogRead(A0);
+  FotoceldaSalon2 = analogRead(A1);
   EthernetClient client = server.available();
   if (client) {
     Serial.println("new client");
@@ -103,18 +107,30 @@ void loop() {
           client.println("<head>");
           // output the value of each analog input pin
           client.print("<h1 style='text-align:center;'>Valor de Fotocelda: ");
-          client.print(Fotocelda);
+          client.print(FotoceldaSalon1);
+          client.print("<h1 style='text-align:center;'>Valor de Fotocelda 2: ");
+          client.print(FotoceldaSalon2);
           client.print("</h1>");
           client.println();
-          float consumo = Fotocelda * 2.75;
+          float consumo = FotoceldaSalon1 * 2.75;
           client.print("<h3>Total a Pagar por consumo de luz $");
           client.print(consumo);
           client.print(" pesos</h3>");
           client.print("</br>");
-          if (Fotocelda <= 500) {
-            digitalWrite(led, LOW);
+          if (FotoceldaSalon1 <= 500) {
+            digitalWrite(ledSalon1, LOW);
+            Serial.print("Leds Apagados");
           } else {
-            digitalWrite(led, HIGH);
+            digitalWrite(ledSalon1, HIGH);
+            Serial.print("Leds prendidos");
+          }
+
+          if (FotoceldaSalon2 <= 500) {
+            digitalWrite(ledSalon2, LOW);
+            Serial.print("Leds Apagados");
+          } else {
+            digitalWrite(ledSalon2, HIGH);
+            Serial.print("Leds prendidos");
           }
           client.println("</html>");
           break;
